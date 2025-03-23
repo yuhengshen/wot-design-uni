@@ -1,0 +1,1 @@
+import{z as s,B as r,r as t}from"./wd-icon.CdzlT4Xd.js";import{L as o}from"./index.CM-GNf6Q.js";const a=a=>{const n=a?s(a)+".":"";return{translate:(s,...a)=>{const e=o.messages(),m=r(e,n+s);return t(m)?m(...a):m}}};export{a as u};
