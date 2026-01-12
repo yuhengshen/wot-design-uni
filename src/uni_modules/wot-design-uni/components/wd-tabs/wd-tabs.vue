@@ -152,6 +152,8 @@ import { useTouch } from '../composables/useTouch'
 import { TABS_KEY, tabsProps, type TabsExpose } from './types'
 import { useChildren } from '../composables/useChildren'
 import { useTranslate } from '../composables/useTranslate'
+import { useParent } from '../composables/useParent'
+import { CONFIG_PROVIDER_KEY } from '../wd-config-provider/types'
 
 const $item = '.wd-tabs__nav-item'
 const $itemText = '.wd-tabs__nav-item-text'
@@ -174,6 +176,12 @@ const state = reactive({
 
 const { children, linkChildren } = useChildren(TABS_KEY)
 linkChildren({ state, props })
+
+const { parent: configProvider } = useParent(CONFIG_PROVIDER_KEY)
+
+const isRtl = computed(() => {
+  return configProvider?.direction?.value === 'rtl'
+})
 
 const { proxy } = getCurrentInstance() as any
 
@@ -330,11 +338,22 @@ async function updateLineStyle(animation: boolean = true) {
       lineStyle.height = addUnit(lineHeight)
       lineStyle.borderRadius = `calc(${addUnit(lineHeight)} / 2)`
     }
-    const rects = await getRect($item, true, proxy)
+    const [rects, containerRect] = await Promise.all([getRect($item, true, proxy), getRect($container, false, proxy)])
     const rect = rects[state.activeIndex]
-    let left = rects.slice(0, state.activeIndex).reduce((prev, curr) => prev + Number(curr.width), 0) + Number(rect.width) / 2
-    if (left) {
-      lineStyle.transform = `translateX(${left}px) translateX(-50%)`
+
+    // Use actual rect positions instead of summing widths.
+    // This is stable across LTR/RTL and avoids flex-start(direction) differences.
+    const rectLeft = Number((rect as any)?.left)
+    const containerLeft = Number((containerRect as any)?.left)
+    const rectWidth = Number((rect as any)?.width)
+    const hasPosition = Number.isFinite(rectLeft) && Number.isFinite(containerLeft)
+
+    const center = hasPosition
+      ? rectLeft - containerLeft + rectWidth / 2
+      : rects.slice(0, state.activeIndex).reduce((prev, curr) => prev + Number((curr as any).width), 0) + rectWidth / 2
+
+    if (center) {
+      lineStyle.transform = `translateX(${center}px) translateX(-50%)`
       if (animation) {
         lineStyle.transition = 'width 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);'
       }

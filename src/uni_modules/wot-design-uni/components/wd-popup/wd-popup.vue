@@ -168,3 +168,12 @@ function noop() {}
 <style lang="scss" scoped>
 @import './index.scss';
 </style>
+
+<style lang="scss">
+.wd-direction-rtl {
+  .wd-popup__close {
+    left: 10px;
+    right: auto;
+  }
+}
+</style>

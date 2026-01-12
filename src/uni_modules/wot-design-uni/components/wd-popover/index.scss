@@ -35,7 +35,7 @@
   @include edeep(icon) {
     vertical-align: middle;
     font-size: 18px;
-    margin-right: 5px;
+    margin-inline-end: 5px;
   }
 
   @include e(menu-inner) {

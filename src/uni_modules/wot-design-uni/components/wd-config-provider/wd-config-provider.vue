@@ -29,8 +29,15 @@ const props = defineProps(configProviderProps)
 
 const { linkChildren } = useChildren(CONFIG_PROVIDER_KEY)
 
+const direction = computed(() => {
+  if (hooksProvider !== None && hooksProvider.direction) {
+    return hooksProvider.direction.value
+  }
+  return props.direction
+})
+
 const themeClass = computed(() => {
-  return `wot-theme-${props.theme} ${props.customClass}`
+  return `wot-theme-${props.theme} ${props.customClass} wd-direction-${direction.value}`
 })
 
 const themeStyle = computed(() => {
@@ -47,8 +54,11 @@ const rootStyle = computed(() => {
 })
 
 linkChildren({
-  themeStyle
+  themeStyle,
+  direction
 } as ConfigProviderProvide)
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+@import './index.scss';
+</style>

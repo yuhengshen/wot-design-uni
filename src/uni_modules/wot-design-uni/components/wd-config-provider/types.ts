@@ -1,6 +1,8 @@
 import type { ExtractPropTypes, PropType, InjectionKey, ComputedRef } from 'vue'
 import { makeStringProp, baseProps } from '../common/props'
 
+export type ConfigProviderDirection = 'ltr' | 'rtl'
+
 export type ConfigProviderTheme = 'light' | 'dark'
 
 export const configProviderProps = {
@@ -9,6 +11,10 @@ export const configProviderProps = {
    * 主题风格，设置为 dark 来开启深色模式，全局生效
    */
   theme: makeStringProp<ConfigProviderTheme>('light'),
+  /**
+   * 布局方向，可选 ltr rtl
+   */
+  direction: makeStringProp<ConfigProviderDirection>('ltr'),
   /**
    * 自定义主题变量
    */
@@ -22,6 +28,7 @@ export type ConfigProviderProps = ExtractPropTypes<typeof configProviderProps>
 
 export type ConfigProviderProvide = {
   themeStyle: ComputedRef<string>
+  direction: ComputedRef<ConfigProviderDirection>
 }
 
 export const CONFIG_PROVIDER_KEY: InjectionKey<ConfigProviderProvide> = Symbol('wd-config-provider')

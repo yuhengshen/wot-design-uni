@@ -96,7 +96,7 @@
   }
 
   @include e(loading) {
-    margin-right: 5px;
+    margin-inline-end: 5px;
     animation: wd-rotate 0.8s linear infinite;
     animation-duration: 2s;
   }
@@ -313,7 +313,7 @@
 
   @include edeep(icon) {
     display: block;
-    margin-right: 6px;
+    margin-inline-end: 6px;
     font-size: $-button-icon-fs;
     vertical-align: middle;
   }
