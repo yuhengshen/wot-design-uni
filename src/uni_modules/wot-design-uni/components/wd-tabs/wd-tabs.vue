@@ -10,7 +10,7 @@
         <wd-sticky :offset-top="offsetTop">
           <view class="wd-tabs__nav wd-tabs__nav--sticky">
             <view class="wd-tabs__nav--wrap">
-              <scroll-view :scroll-x="innerSlidable" scroll-with-animation :scroll-left="state.scrollLeft">
+              <scroll-view :scroll-x="innerSlidable" :scroll-with-animation="!isRtl" :scroll-left="isRtl ? undefined : state.scrollLeft">
                 <view class="wd-tabs__nav-container">
                   <view
                     @click="handleSelect(index)"
@@ -84,7 +84,7 @@
     >
       <view class="wd-tabs__nav">
         <view class="wd-tabs__nav--wrap">
-          <scroll-view :scroll-x="innerSlidable" scroll-with-animation :scroll-left="state.scrollLeft">
+          <scroll-view :scroll-x="innerSlidable" :scroll-with-animation="!isRtl" :scroll-left="isRtl ? undefined : state.scrollLeft">
             <view class="wd-tabs__nav-container">
               <view
                 v-for="(item, index) in children"
@@ -196,8 +196,15 @@ const bodyStyle = computed(() => {
     return ''
   }
 
+  let left = '0'
+  if (isRtl.value) {
+    left = 100 * state.activeIndex + '%'
+  } else {
+    left = -100 * state.activeIndex + '%'
+  }
+
   return objToStyle({
-    left: -100 * state.activeIndex + '%',
+    left,
     'transition-duration': props.duration + 'ms',
     '-webkit-transition-duration': props.duration + 'ms'
   })
@@ -430,9 +437,12 @@ function onTouchEnd() {
   const { direction, deltaX, offsetX } = touch
   const minSwipeDistance = 50
   if (direction.value === 'horizontal' && offsetX.value >= minSwipeDistance) {
-    if (deltaX.value > 0 && state.activeIndex !== 0) {
+    const isNext = isRtl.value ? deltaX.value > 0 : deltaX.value < 0
+    const isPrev = isRtl.value ? deltaX.value < 0 : deltaX.value > 0
+
+    if (isPrev && state.activeIndex !== 0) {
       setActive(state.activeIndex - 1)
-    } else if (deltaX.value < 0 && state.activeIndex !== children.length - 1) {
+    } else if (isNext && state.activeIndex !== children.length - 1) {
       setActive(state.activeIndex + 1)
     }
   }
@@ -461,4 +471,11 @@ defineExpose<TabsExpose>({
 </script>
 <style lang="scss" scoped>
 @import './index.scss';
+</style>
+
+<style lang="scss">
+.wd-direction-rtl .wd-tabs__map-btn {
+  right: auto;
+  left: 0;
+}
 </style>

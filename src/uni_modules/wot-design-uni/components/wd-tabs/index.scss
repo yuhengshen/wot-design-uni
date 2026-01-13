@@ -295,7 +295,7 @@
 
   @include when(map) {
     .wd-tabs__nav--wrap {
-      padding-right: 40px;
+      padding-inline-end: 40px;
     }
   }
 }
