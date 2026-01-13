@@ -24,8 +24,12 @@ export default {
 import { computed, type CSSProperties } from 'vue'
 import { badgeProps } from './types'
 import { addUnit, isDef, isNumber, objToStyle } from '../common/util'
+import { useDirection } from '../composables'
 
 const props = defineProps(badgeProps)
+
+const { isRtl } = useDirection()
+
 const content = computed(() => {
   const { modelValue, max, isDot } = props
   if (isDot) return ''
@@ -47,7 +51,11 @@ const contentStyle = computed(() => {
   }
 
   if (isDef(props.right)) {
-    style.right = addUnit(props.right)
+    if (isRtl.value) {
+      style.left = addUnit(props.right)
+    } else {
+      style.right = addUnit(props.right)
+    }
   }
   return objToStyle(style)
 })
@@ -58,4 +66,12 @@ const shouldShowBadge = computed(() => !props.hidden && (content.value || (conte
 
 <style lang="scss" scoped>
 @import './index.scss';
+</style>
+
+<style lang="scss">
+.wd-direction-rtl .wd-badge__content.is-fixed {
+  right: auto;
+  left: 0;
+  transform: translate(-50%, -50%);
+}
 </style>

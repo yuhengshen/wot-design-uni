@@ -42,7 +42,7 @@ export const badgeProps = {
    */
   top: numericProp,
   /**
-   * 为正时，角标向左偏移对应的像素
+   * 为正时，角标向左偏移对应的像素，rtl 时表示 left
    */
   right: numericProp
 }

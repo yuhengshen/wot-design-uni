@@ -152,8 +152,7 @@ import { useTouch } from '../composables/useTouch'
 import { TABS_KEY, tabsProps, type TabsExpose } from './types'
 import { useChildren } from '../composables/useChildren'
 import { useTranslate } from '../composables/useTranslate'
-import { useParent } from '../composables/useParent'
-import { CONFIG_PROVIDER_KEY } from '../wd-config-provider/types'
+import { useDirection } from '../composables'
 
 const $item = '.wd-tabs__nav-item'
 const $itemText = '.wd-tabs__nav-item-text'
@@ -177,11 +176,7 @@ const state = reactive({
 const { children, linkChildren } = useChildren(TABS_KEY)
 linkChildren({ state, props })
 
-const { parent: configProvider } = useParent(CONFIG_PROVIDER_KEY)
-
-const isRtl = computed(() => {
-  return configProvider?.direction?.value === 'rtl'
-})
+const { isRtl } = useDirection()
 
 const { proxy } = getCurrentInstance() as any
 
