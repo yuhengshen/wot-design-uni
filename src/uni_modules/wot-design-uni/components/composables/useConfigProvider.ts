@@ -1,5 +1,5 @@
 import { computed, provide, unref, type Ref } from 'vue'
-import { type ConfigProviderThemeVars } from '../wd-config-provider/types'
+import { type ConfigProviderDirection, type ConfigProviderThemeVars } from '../wd-config-provider/types'
 import { objToStyle } from '../common/util'
 
 export const USE_CONFIG_PROVIDER_KEY = '__CONFIG_PROVIDER__'
@@ -19,13 +19,22 @@ export const mapThemeVarsToCSSVars = (themeVars: Record<string, string>) => {
   return cssVars
 }
 
-export function useConfigProvider({ themeVars }: { themeVars: ConfigProviderThemeVars | Ref<ConfigProviderThemeVars> }) {
+export function useConfigProvider({
+  themeVars,
+  direction
+}: {
+  themeVars: ConfigProviderThemeVars | Ref<ConfigProviderThemeVars>
+  direction: ConfigProviderDirection | Ref<ConfigProviderDirection>
+}) {
   const themeStyle = computed(() => {
     const styleObj = mapThemeVarsToCSSVars(unref(themeVars))
     return styleObj ? `${objToStyle(styleObj)}` : ''
   })
 
+  const dir = computed(() => unref(direction) || undefined)
+
   provide(USE_CONFIG_PROVIDER_KEY, {
-    themeStyle
+    themeStyle,
+    direction: dir
   })
 }

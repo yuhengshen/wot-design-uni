@@ -1,7 +1,7 @@
 import type { ExtractPropTypes, PropType, InjectionKey, ComputedRef } from 'vue'
 import { makeStringProp, baseProps } from '../common/props'
 
-export type ConfigProviderDirection = 'ltr' | 'rtl'
+export type ConfigProviderDirection = 'ltr' | 'rtl' | undefined
 
 export type ConfigProviderTheme = 'light' | 'dark'
 
@@ -14,7 +14,7 @@ export const configProviderProps = {
   /**
    * 布局方向，可选 ltr rtl
    */
-  direction: makeStringProp<ConfigProviderDirection>('ltr'),
+  direction: makeStringProp<ConfigProviderDirection>(undefined),
   /**
    * 自定义主题变量
    */

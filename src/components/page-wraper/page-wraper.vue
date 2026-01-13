@@ -86,7 +86,7 @@ const themeVars = computed<ConfigProviderThemeVars>(() => {
   return isRed.value ? { colorTheme: 'red' } : {}
 })
 
-useConfigProvider({ themeVars })
+useConfigProvider({ themeVars, direction: 'rtl' })
 
 const theme = computed(() => {
   return darkMode.isDark.value || isDark.value ? 'dark' : 'light'

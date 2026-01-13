@@ -30,7 +30,7 @@ const props = defineProps(configProviderProps)
 const { linkChildren } = useChildren(CONFIG_PROVIDER_KEY)
 
 const direction = computed(() => {
-  if (hooksProvider !== None && hooksProvider.direction) {
+  if (hooksProvider !== None && hooksProvider.direction?.value) {
     return hooksProvider.direction.value
   }
   return props.direction
